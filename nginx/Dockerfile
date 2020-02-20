@@ -2,6 +2,8 @@ FROM alpine:latest
 
 ENV NGINX_VERSION 1.15.3
 
+COPY 0001.patch /tmp
+
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     && CONFIG="\
     --prefix=/etc/nginx \
@@ -67,6 +69,7 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     && curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
     && curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
     && git clone https://github.com/winshining/nginx-http-flv-module.git /usr/src/nginx-http-flv-module \
+    && (cd /usr/src/nginx-http-flv-module && git am /tmp/0001.patch) \
     && export GNUPGHOME="$(mktemp -d)" \
     && found=''; \
     for server in \

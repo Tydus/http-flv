@@ -1,14 +1,14 @@
-From bb69553660522bfb138678ae0ae2884e5efe50dd Mon Sep 17 00:00:00 2001
+From add08e17742a2be0a9fa03b3a61928bacf480109 Mon Sep 17 00:00:00 2001
 From: Tydus <noreply@example.com>
-Date: Thu, 20 Feb 2020 19:57:11 +0900
-Subject: [PATCH] rtmp-module: Don't fail if no stream name specified
+Date: Sat, 22 Feb 2020 01:38:12 +0900
+Subject: [PATCH] rtmp: use args as name if no stream name specified
 
 ---
  ngx_rtmp_cmd_module.c | 15 +++++++++------
  1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/ngx_rtmp_cmd_module.c b/ngx_rtmp_cmd_module.c
-index e7826aa..635396b 100644
+index e7826aa..bc9f112 100644
 --- a/ngx_rtmp_cmd_module.c
 +++ b/ngx_rtmp_cmd_module.c
 @@ -550,10 +550,11 @@ ngx_rtmp_cmd_publish_init(ngx_rtmp_session_t *s, ngx_rtmp_header_t *h,
@@ -21,7 +21,7 @@ index e7826aa..635396b 100644
  
 -        return NGX_ERROR;
 +        //return NGX_ERROR;
-+        ngx_memcpy(v.name, "_dummy", 7);
++        ngx_memcpy(v.name, v.args, ngx_strlen(v.args));
      }
  
      if (ngx_rtmp_process_request_line(s, v.name, v.args,
@@ -35,7 +35,7 @@ index e7826aa..635396b 100644
  
 -        return NGX_ERROR;
 +        //return NGX_ERROR;
-+        ngx_memcpy(v.name, "_dummy", 7);
++        ngx_memcpy(v.name, v.args, ngx_strlen(v.args));
      }
  
      if (ngx_rtmp_process_request_line(s, v.name, v.args,
@@ -49,7 +49,7 @@ index e7826aa..635396b 100644
          
 -        return NGX_ERROR;
 +        //return NGX_ERROR;
-+        ngx_memcpy(v.name, "_dummy", 7);
++        ngx_memcpy(v.name, v.args, ngx_strlen(v.args));
      }
  
      ngx_log_error(NGX_LOG_INFO, s->connection->log, 0,

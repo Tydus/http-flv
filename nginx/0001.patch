@@ -1,14 +1,14 @@
-From add08e17742a2be0a9fa03b3a61928bacf480109 Mon Sep 17 00:00:00 2001
+From 91c78de3e044b8ddc323467b6103fb5e9fa14d96 Mon Sep 17 00:00:00 2001
 From: Tydus <noreply@example.com>
 Date: Sat, 22 Feb 2020 01:38:12 +0900
 Subject: [PATCH] rtmp: use args as name if no stream name specified
 
 ---
- ngx_rtmp_cmd_module.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ ngx_rtmp_cmd_module.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/ngx_rtmp_cmd_module.c b/ngx_rtmp_cmd_module.c
-index e7826aa..bc9f112 100644
+index e7826aa..c36b88a 100644
 --- a/ngx_rtmp_cmd_module.c
 +++ b/ngx_rtmp_cmd_module.c
 @@ -550,10 +550,11 @@ ngx_rtmp_cmd_publish_init(ngx_rtmp_session_t *s, ngx_rtmp_header_t *h,
@@ -21,38 +21,10 @@ index e7826aa..bc9f112 100644
  
 -        return NGX_ERROR;
 +        //return NGX_ERROR;
-+        ngx_memcpy(v.name, v.args, ngx_strlen(v.args));
++        ngx_memcpy(v.name, s->app.data, s->app.len);
      }
  
      if (ngx_rtmp_process_request_line(s, v.name, v.args,
-@@ -621,10 +622,11 @@ ngx_rtmp_cmd_play_init(ngx_rtmp_session_t *s, ngx_rtmp_header_t *h,
-     ngx_rtmp_cmd_fill_args(v.name, v.args);
- 
-     if (ngx_strlen(v.name) == 0) {
--        ngx_log_error(NGX_LOG_ERR, s->connection->log, 0,
-+        ngx_log_error(NGX_LOG_WARN, s->connection->log, 0,
-                       "play: no stream name specified");
- 
--        return NGX_ERROR;
-+        //return NGX_ERROR;
-+        ngx_memcpy(v.name, v.args, ngx_strlen(v.args));
-     }
- 
-     if (ngx_rtmp_process_request_line(s, v.name, v.args,
-@@ -698,10 +700,11 @@ ngx_rtmp_cmd_play2_init(ngx_rtmp_session_t *s, ngx_rtmp_header_t *h,
-     ngx_rtmp_cmd_fill_args(v.name, v.args);
- 
-     if (ngx_strlen(v.name) == 0) {
--        ngx_log_error(NGX_LOG_ERR, s->connection->log, 0,
-+        ngx_log_error(NGX_LOG_WARN, s->connection->log, 0,
-                       "play2: no stream name specified");
-         
--        return NGX_ERROR;
-+        //return NGX_ERROR;
-+        ngx_memcpy(v.name, v.args, ngx_strlen(v.args));
-     }
- 
-     ngx_log_error(NGX_LOG_INFO, s->connection->log, 0,
 -- 
 2.7.4
 
